@@ -20,11 +20,16 @@
         const headerEl = document.querySelector('#header');
         if (!headerEl) return;
         headerEl.classList.toggle('header-show');
-        headerToggleBtn.classList.toggle('bi-list');
-        headerToggleBtn.classList.toggle('bi-x');
+        // If the toggle contains an <i> icon, toggle classes on that icon so the visual changes.
+        const iconEl = headerToggleBtn.querySelector('i') || headerToggleBtn;
+        iconEl.classList.toggle('bi-list');
+        iconEl.classList.toggle('bi-x');
       }
 
-      headerToggleBtn.addEventListener('click', headerToggle);
+      headerToggleBtn.addEventListener('click', headerToggle, {passive: false});
+      // Additional listeners to improve responsiveness on touch/pointer devices
+      headerToggleBtn.addEventListener('pointerdown', function (e) { e.preventDefault(); headerToggle(e); }, {passive: false});
+      headerToggleBtn.addEventListener('touchend', function (e) { e.preventDefault(); headerToggle(e); }, {passive: false});
       headerToggleBtn.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
           headerToggle(e);
