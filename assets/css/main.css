@@ -263,18 +263,6 @@ h6 {
   padding: 0 0 20px 0;
   margin: 0;
 }
-.slider_hide {
-    overflow: auto;
-}
-
-.slider_hide::-webkit-scrollbar {
-    display: none;
-}
-
-.slider_hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
 
 .navmenu a,
 .navmenu a:focus {
@@ -516,7 +504,7 @@ section,
 .section {
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 20px 0;
+  padding: 60px 0;
   overflow: clip;
 }
 
@@ -524,7 +512,7 @@ section,
 # Global Section Titles
 --------------------------------------------------------------*/
 .section-title {
-  padding-bottom: 20px;
+  padding-bottom: 60px;
   position: relative;
 }
 
@@ -646,13 +634,11 @@ section,
 .about .content ul li {
   margin-bottom: 20px;
   display: flex;
-
   align-items: center;
 }
 
 .about .content ul strong {
   margin-right: 10px;
-  flex-wrap: wrap;
 }
 
 .about .content ul i {
@@ -891,8 +877,8 @@ section,
 }
 
 .portfolio .portfolio-content .portfolio-info .details-link {
-  left: 42%;
-  font-size: 50px;
+  left: 50%;
+  font-size: 34px;
   line-height: 0;
 }
 
@@ -1284,7 +1270,6 @@ section,
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
-/* .starter-section {
- Add your styles here 
-} 
-*/
+.starter-section {
+  /* Add your styles here */
+}
