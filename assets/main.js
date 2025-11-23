@@ -121,24 +121,10 @@
       handler: function(direction) {
         let progress = item.querySelectorAll('.progress .progress-bar');
         progress.forEach(el => {
-          // set width (this will trigger CSS transition defined in stylesheet)
           el.style.width = el.getAttribute('aria-valuenow') + '%';
-          // also expose as CSS custom property for advanced styling if needed
-          el.style.setProperty('--progress', el.getAttribute('aria-valuenow') + '%');
         });
       }
     });
-  });
-
-  // Add a gentle pulse to the YouTube button to draw attention
-  window.addEventListener('load', function() {
-    const yt = document.querySelector('.btn-youtube');
-    if (yt) {
-      // start pulsing after a short delay
-      setTimeout(() => yt.classList.add('pulse'), 700);
-      // stop pulsing after 10s to avoid distraction (optional)
-      setTimeout(() => yt.classList.remove('pulse'), 10000);
-    }
   });
 
   /**
