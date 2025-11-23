@@ -157,6 +157,16 @@ h6 {
   border-right: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
 }
 
+/* Hide scrollbar for the fixed sidebar header while keeping it scrollable */
+.header {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.header::-webkit-scrollbar {
+  width: 0;
+  background: transparent; /* WebKit */
+}
+
 .header .profile-img img {
   margin: 15px auto;
   display: block;
