@@ -14,12 +14,29 @@
    */
   const headerToggleBtn = document.querySelector('.header-toggle');
 
-  function headerToggle() {
-    document.querySelector('#header').classList.toggle('header-show');
-    headerToggleBtn.classList.toggle('bi-list');
-    headerToggleBtn.classList.toggle('bi-x');
+  // Guard against missing element and add keyboard accessibility.
+  if (headerToggleBtn) {
+    function headerToggle(e) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+      const headerEl = document.querySelector('#header');
+      if (!headerEl) return;
+      headerEl.classList.toggle('header-show');
+      headerToggleBtn.classList.toggle('bi-list');
+      headerToggleBtn.classList.toggle('bi-x');
+    }
+
+    headerToggleBtn.addEventListener('click', headerToggle);
+    // Make toggle operable by keyboard (Enter / Space)
+    headerToggleBtn.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        headerToggle(e);
+      }
+    });
+    // Ensure it's focusable for keyboard users
+    if (!headerToggleBtn.hasAttribute('tabindex')) headerToggleBtn.setAttribute('tabindex', '0');
+  } else {
+    console.warn('Header toggle element not found');
   }
-  headerToggleBtn.addEventListener('click', headerToggle);
 
   /**
    * Hide mobile nav on same-page/hash links
