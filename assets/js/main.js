@@ -12,61 +12,14 @@
   /**
    * Header toggle
    */
-  // Initialize header toggle with robust handling and optional debug logs.
-  (function initHeaderToggle() {
-    function attachToggle(headerToggleBtn) {
-      function headerToggle(e) {
-        if (e && typeof e.preventDefault === 'function') e.preventDefault();
-        const headerEl = document.querySelector('#header');
-        if (!headerEl) return;
-        headerEl.classList.toggle('header-show');
-        // If the toggle contains an <i> icon, toggle classes on that icon so the visual changes.
-        const iconEl = headerToggleBtn.querySelector('i') || headerToggleBtn;
-        iconEl.classList.toggle('bi-list');
-        iconEl.classList.toggle('bi-x');
-      }
+  const headerToggleBtn = document.querySelector('.header-toggle');
 
-      headerToggleBtn.addEventListener('click', headerToggle, {passive: false});
-      // Additional listeners to improve responsiveness on touch/pointer devices
-      headerToggleBtn.addEventListener('pointerdown', function (e) { e.preventDefault(); headerToggle(e); }, {passive: false});
-      headerToggleBtn.addEventListener('touchend', function (e) { e.preventDefault(); headerToggle(e); }, {passive: false});
-      headerToggleBtn.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-          headerToggle(e);
-        }
-      });
-      if (!headerToggleBtn.hasAttribute('tabindex')) headerToggleBtn.setAttribute('tabindex', '0');
-      // small log to help debugging in console
-      if (window.__DEBUG_HEADER_TOGGLE__) console.info('Header toggle attached', headerToggleBtn);
-    }
-
-    function findAndAttach() {
-      const btn = document.querySelector('.header-toggle');
-      if (btn) {
-        attachToggle(btn);
-      } else {
-        // fallback: use delegated listener on document for clicks on elements with class
-        document.addEventListener('click', function delegatedClick(e) {
-          const target = e.target.closest && e.target.closest('.header-toggle');
-          if (target) {
-            // attach permanent listener for future
-            attachToggle(target);
-            // call once
-            target.click();
-            // remove delegation after first use
-            document.removeEventListener('click', delegatedClick);
-          }
-        });
-        if (window.__DEBUG_HEADER_TOGGLE__) console.warn('Header toggle not found initially; using delegation fallback');
-      }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', findAndAttach);
-    } else {
-      findAndAttach();
-    }
-  })();
+  function headerToggle() {
+    document.querySelector('#header').classList.toggle('header-show');
+    headerToggleBtn.classList.toggle('bi-list');
+    headerToggleBtn.classList.toggle('bi-x');
+  }
+  headerToggleBtn.addEventListener('click', headerToggle);
 
   /**
    * Hide mobile nav on same-page/hash links
@@ -74,14 +27,7 @@
   document.querySelectorAll('#navmenu a').forEach(navmenu => {
     navmenu.addEventListener('click', () => {
       if (document.querySelector('.header-show')) {
-        const toggleBtn = document.querySelector('.header-toggle');
-        if (toggleBtn) {
-          // simulate a click so the same handlers run (icon swap, ARIA, etc.)
-          toggleBtn.click();
-        } else {
-          // fallback: just remove the class
-          document.querySelector('#header').classList.remove('header-show');
-        }
+        headerToggle();
       }
     });
 
@@ -155,8 +101,7 @@
       loop: true,
       typeSpeed: 100,
       backSpeed: 50,
-      backDelay: 2000,
-      showCursor: false
+      backDelay: 2000
     });
   }
 
@@ -176,24 +121,10 @@
       handler: function(direction) {
         let progress = item.querySelectorAll('.progress .progress-bar');
         progress.forEach(el => {
-          // set width (this will trigger CSS transition defined in stylesheet)
           el.style.width = el.getAttribute('aria-valuenow') + '%';
-          // also expose as CSS custom property for advanced styling if needed
-          el.style.setProperty('--progress', el.getAttribute('aria-valuenow') + '%');
         });
       }
     });
-  });
-
-  // Add a gentle pulse to the YouTube button to draw attention
-  window.addEventListener('load', function() {
-    const yt = document.querySelector('.btn-youtube');
-    if (yt) {
-      // start pulsing after a short delay
-      setTimeout(() => yt.classList.add('pulse'), 700);
-      // stop pulsing after 10s to avoid distraction (optional)
-      setTimeout(() => yt.classList.remove('pulse'), 10000);
-    }
   });
 
   /**
