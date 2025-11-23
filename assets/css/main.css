@@ -1270,6 +1270,10 @@ section,
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
-.starter-section {
+/* .starter-section { */
   /* Add your styles here */
+/* } */
+
+.slider_hide{
+   overflow: auto;
 }
