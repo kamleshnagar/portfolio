@@ -69,7 +69,14 @@
   document.querySelectorAll('#navmenu a').forEach(navmenu => {
     navmenu.addEventListener('click', () => {
       if (document.querySelector('.header-show')) {
-        headerToggle();
+        const toggleBtn = document.querySelector('.header-toggle');
+        if (toggleBtn) {
+          // simulate a click so the same handlers run (icon swap, ARIA, etc.)
+          toggleBtn.click();
+        } else {
+          // fallback: just remove the class
+          document.querySelector('#header').classList.remove('header-show');
+        }
       }
     });
 
@@ -143,7 +150,8 @@
       loop: true,
       typeSpeed: 100,
       backSpeed: 50,
-      backDelay: 2000
+      backDelay: 2000,
+      showCursor: false
     });
   }
 
