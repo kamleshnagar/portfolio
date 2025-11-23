@@ -12,31 +12,56 @@
   /**
    * Header toggle
    */
-  const headerToggleBtn = document.querySelector('.header-toggle');
+  // Initialize header toggle with robust handling and optional debug logs.
+  (function initHeaderToggle() {
+    function attachToggle(headerToggleBtn) {
+      function headerToggle(e) {
+        if (e && typeof e.preventDefault === 'function') e.preventDefault();
+        const headerEl = document.querySelector('#header');
+        if (!headerEl) return;
+        headerEl.classList.toggle('header-show');
+        headerToggleBtn.classList.toggle('bi-list');
+        headerToggleBtn.classList.toggle('bi-x');
+      }
 
-  // Guard against missing element and add keyboard accessibility.
-  if (headerToggleBtn) {
-    function headerToggle(e) {
-      if (e && typeof e.preventDefault === 'function') e.preventDefault();
-      const headerEl = document.querySelector('#header');
-      if (!headerEl) return;
-      headerEl.classList.toggle('header-show');
-      headerToggleBtn.classList.toggle('bi-list');
-      headerToggleBtn.classList.toggle('bi-x');
+      headerToggleBtn.addEventListener('click', headerToggle);
+      headerToggleBtn.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          headerToggle(e);
+        }
+      });
+      if (!headerToggleBtn.hasAttribute('tabindex')) headerToggleBtn.setAttribute('tabindex', '0');
+      // small log to help debugging in console
+      if (window.__DEBUG_HEADER_TOGGLE__) console.info('Header toggle attached', headerToggleBtn);
     }
 
-    headerToggleBtn.addEventListener('click', headerToggle);
-    // Make toggle operable by keyboard (Enter / Space)
-    headerToggleBtn.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-        headerToggle(e);
+    function findAndAttach() {
+      const btn = document.querySelector('.header-toggle');
+      if (btn) {
+        attachToggle(btn);
+      } else {
+        // fallback: use delegated listener on document for clicks on elements with class
+        document.addEventListener('click', function delegatedClick(e) {
+          const target = e.target.closest && e.target.closest('.header-toggle');
+          if (target) {
+            // attach permanent listener for future
+            attachToggle(target);
+            // call once
+            target.click();
+            // remove delegation after first use
+            document.removeEventListener('click', delegatedClick);
+          }
+        });
+        if (window.__DEBUG_HEADER_TOGGLE__) console.warn('Header toggle not found initially; using delegation fallback');
       }
-    });
-    // Ensure it's focusable for keyboard users
-    if (!headerToggleBtn.hasAttribute('tabindex')) headerToggleBtn.setAttribute('tabindex', '0');
-  } else {
-    console.warn('Header toggle element not found');
-  }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', findAndAttach);
+    } else {
+      findAndAttach();
+    }
+  })();
 
   /**
    * Hide mobile nav on same-page/hash links
